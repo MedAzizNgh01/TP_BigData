@@ -3,4 +3,4 @@
 *.scala linguist-language=Spark
 *.conf linguist-language=Kafka
 *.properties linguist-language=Kafka
-*.sh linguist-language=Shell
+
