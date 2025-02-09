@@ -63,23 +63,26 @@ transactionsStream = transactionsStream.filter(col("typeTransaction") != "error"
 # Supprimer les lignes où 'lieu' est nulle
 transactionsStream = transactionsStream.na.drop(subset=["lieu"])
 
-
+# **2. Agrégation des données**
 # Agréger le montant total ('EUR') par devise 
 aggregatedStream = transactionsStream \
     .groupBy("devise") \
     .agg(spark_sum("EUR").alias("Somme des transactions"))
 
-# **Écrire le résultat en format Parquet**
-query = aggregatedStream \
+# **3. Appliquer .limit(100) aux résultats agrégés**
+aggregatedStreamLimited = aggregatedStream.limit(100)
+
+# **4. Écrire les résultats agrégés dans un fichier Parquet (avec .limit(100))**
+aggregatedQuery = aggregatedStreamLimited \
     .writeStream \
     .format("parquet") \
     .option("path", "s3a://transaction/aggregated_transactions") \
-    .option("checkpointLocation", "s3a://transaction/transactions/checkpoint") \
+    .option("checkpointLocation", "s3a://transaction/transactions/checkpoint_aggregated") \
     .trigger(Trigger.Once()) \
     .start()
 
 # Attendre que la requête se termine
-query.awaitTermination()
+aggregatedQuery.awaitTermination()
 
 # Arrêter la session Spark
 spark.stop()
