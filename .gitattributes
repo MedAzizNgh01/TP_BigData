@@ -4,6 +4,3 @@
 *.conf linguist-language=Kafka
 *.properties linguist-language=Kafka
 *.sh linguist-language=Shell
-
-# Ignore auto-detection settings
-* text=auto
