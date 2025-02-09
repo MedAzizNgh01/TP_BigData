@@ -1,2 +1,9 @@
-# Auto detect text files and perform LF normalization
+# Set programming languages explicitly
+*.py linguist-language=Python
+*.scala linguist-language=Spark
+*.conf linguist-language=Kafka
+*.properties linguist-language=Kafka
+*.sh linguist-language=Shell
+
+# Ignore auto-detection settings
 * text=auto
